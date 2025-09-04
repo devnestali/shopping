@@ -5,8 +5,17 @@ import { Input } from "@/components/Input";
 import { Filter } from "@/components/Filter";
 
 import { FilterStatus } from "@/types/FilterStatus";
+import { Item } from "@/components/Item";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
+
+function handleRemoveItem() {
+  console.log('Remove item')
+}
+
+function handleStatusChange() {
+  console.log('Cambia status')
+}
 
 export function Home() {
   return (
@@ -15,7 +24,7 @@ export function Home() {
       
       <View style={styles.form}>
         <Input placeholder="¿Que necesitas comprar?" />
-        <Button title="Entrar"/>
+        <Button title="Añadir"/>
       </View>
 
       <View style={styles.content}>
@@ -30,6 +39,12 @@ export function Home() {
             <Text style={styles.clearText}>Limpiar</Text>
           </TouchableOpacity>
         </View>
+
+        <Item 
+          data={{ status: FilterStatus.DONE, description: 'Comprar moto' }}
+          onStatusChange={() => handleStatusChange()}
+          onRemove={() => handleRemoveItem()}
+        />
         
       </View>
     </View>
