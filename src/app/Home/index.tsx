@@ -7,20 +7,15 @@ import { Filter } from "@/components/Filter";
 
 import { FilterStatus } from "@/types/FilterStatus";
 import { Item } from "@/components/Item";
+import { ItemStorage } from "@/storage/itemsStorage";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
-
-interface ItemProps {
-  id: string
-  status: FilterStatus
-  description: string
-}
 
 
 export function Home() {
   const [filter, setFilter] = useState<FilterStatus>()
   const [description, setDescription] = useState<string>()
-  const [items, setItems] = useState<ItemProps[]>([])
+  const [items, setItems] = useState<ItemStorage[]>([])
 
   function toggleFilter(status: FilterStatus) {
     setFilter(status)
@@ -35,7 +30,7 @@ export function Home() {
       return Alert.alert("Añadir", "Ingrese una descripción para agregar")
     }
 
-    const newItem: ItemProps = {
+    const newItem: ItemStorage = {
       id: Math.random().toString(36).substring(2),
       description,
       status: FilterStatus.PENDING
@@ -51,10 +46,6 @@ export function Home() {
   function handleStatusChange() {
     console.log('Cambia status')
   }
-
-  useEffect(() => {
-    console.log(items)
-  }, [items])
   
   return (
     <View style={styles.container}>
