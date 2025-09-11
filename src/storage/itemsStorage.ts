@@ -3,13 +3,13 @@ import { FilterStatus } from '@/types/FilterStatus'
 
 const ITEMS_STORAGE_KEY = "@comprar:items"
 
-export type ItemStorage = {
+export type ItemStorageProps = {
   id: string
   status: FilterStatus
   description: string
 }
 
-async function get(): Promise<ItemStorage[]> {
+async function get(): Promise<ItemStorageProps[]> {
   try {
     const storage = await AsyncStorage.getItem(ITEMS_STORAGE_KEY)
 
@@ -19,7 +19,7 @@ async function get(): Promise<ItemStorage[]> {
   }
 }
 
-async function getByStatus(status: FilterStatus): Promise<ItemStorage[]> {
+async function getByStatus(status: FilterStatus): Promise<ItemStorageProps[]> {
   const items = await get()
 
   return items.filter((item) => item.status === status)

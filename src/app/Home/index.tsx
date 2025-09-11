@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity, Text, FlatList, Alert } from "react-native";
 import { styles } from "./styles";
 import { Button } from "@/components/Button";
@@ -7,7 +7,7 @@ import { Filter } from "@/components/Filter";
 
 import { FilterStatus } from "@/types/FilterStatus";
 import { Item } from "@/components/Item";
-import { ItemStorage } from "@/storage/itemsStorage";
+import { ItemStorageProps, ItemStorage } from "@/storage/itemsStorage";
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
@@ -15,7 +15,7 @@ const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 export function Home() {
   const [filter, setFilter] = useState<FilterStatus>()
   const [description, setDescription] = useState<string>()
-  const [items, setItems] = useState<ItemStorage[]>([])
+  const [items, setItems] = useState<ItemStorageProps[]>([])
 
   function toggleFilter(status: FilterStatus) {
     setFilter(status)
@@ -27,10 +27,10 @@ export function Home() {
 
   function handleAddItem() {
     if(!description?.trim()) {
-      return Alert.alert("Añadir", "Ingrese una descripción para agregar")
+      return Alert.alert("Añadir", "Ingrese una descripción para agregar.")
     }
 
-    const newItem: ItemStorage = {
+    const newItem: ItemStorageProps = {
       id: Math.random().toString(36).substring(2),
       description,
       status: FilterStatus.PENDING
@@ -46,6 +46,21 @@ export function Home() {
   function handleStatusChange() {
     console.log('Cambia status')
   }
+
+  async function getItems() {
+    try {
+      const response = await ItemStorage.get()
+      setItems(response)
+    
+    } catch (error) {
+      console.error(error)
+      Alert.alert("Error", "No fue posible filtrar por los artículos.")
+    }
+  }
+ 
+  useEffect(() => {
+    getItems()
+  }, [])
   
   return (
     <View style={styles.container}>

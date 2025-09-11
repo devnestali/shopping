@@ -20,7 +20,7 @@ export function Filter({ status, isActive, ...rest }: FilterProps) {
       <StatusIcon status={status} />
       
       <Text style={styles.title}>
-        {status === FilterStatus.DONE ? 'Completadas' : 'Pendientes'}
+        {status === FilterStatus.DONE ? 'Compradas' : 'Pendientes'}
       </Text>
     </TouchableOpacity>
   )
