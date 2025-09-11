@@ -25,7 +25,7 @@ export function Home() {
     setDescription(value)
   }
 
-  function handleAddItem() {
+  async function handleAddItem() {
     if(!description?.trim()) {
       return Alert.alert("Añadir", "Ingrese una descripción para agregar.")
     }
@@ -36,7 +36,8 @@ export function Home() {
       status: FilterStatus.PENDING
     }
 
-    setItems((previousItems) => [newItem, ...previousItems ])
+    await ItemStorage.add(newItem)
+    await getItems()
   }
 
   function handleRemoveItem() {
