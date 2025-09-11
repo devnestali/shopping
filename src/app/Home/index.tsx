@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, Image, TouchableOpacity, Text, FlatList, Alert } from "react-native";
 import { styles } from "./styles";
 import { Button } from "@/components/Button";
