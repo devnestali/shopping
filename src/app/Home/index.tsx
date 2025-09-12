@@ -39,17 +39,30 @@ export function Home() {
     await ItemStorage.add(newItem)
     await itemsByStatus()
     
-    Alert.alert("Añadido", `Añadido ${description}`)
     setFilter(FilterStatus.PENDING)
     setDescription("")
   }
 
-  function handleRemoveItem() {
-    console.log('Remove item')
+  async function handleRemoveItem(id: string) {
+    try {
+      await ItemStorage.remove(id)
+      await itemsByStatus()
+    
+    } catch (error) {
+      console.error(error)
+      Alert.alert("Eliminar", "No fue posible eliminar el artículo.")
+    }
   }
 
-  function handleStatusChange() {
-    console.log('Cambia status')
+  async function handleStatusChange(id: string) {
+    try {
+      await ItemStorage.toggleStatus(id)
+      await itemsByStatus()
+    
+    } catch (error) {
+      console.error(error)
+      Alert.alert("Estado", "No fue posible actualizar el estado actual.")
+    }
   }
 
   async function itemsByStatus() {
@@ -60,6 +73,24 @@ export function Home() {
     } catch (error) {
       console.error(error)
       Alert.alert("Error", "No fue posible filtrar por los artículos.")
+    }
+  }
+
+  function handleClear() {
+    Alert.alert("Limpiar", "¿Quieres eliminar todos?", [
+      { text: "No", style: "cancel"},
+      { text: "Sí", onPress: () => onClear() }
+    ])
+  }
+
+  async function onClear() {
+    try {
+      await ItemStorage.clear()
+      setItems([])
+    
+    } catch (error) {
+      console.error(error)
+      Alert.alert("Limpiar", "No fue posible eliminar todos los artículos.")
     }
   }
   
@@ -99,7 +130,7 @@ export function Home() {
             })
           }
 
-          <TouchableOpacity style={styles.clearButton}>
+          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
             <Text style={styles.clearText}>Limpiar</Text>
           </TouchableOpacity>
         </View>
@@ -111,8 +142,8 @@ export function Home() {
             return (
               <Item
                 data={item}
-                onStatusChange={() => handleStatusChange()}
-                onRemove={() => handleRemoveItem()}
+                onStatusChange={() => handleStatusChange(item.id)}
+                onRemove={() => handleRemoveItem(item.id)}
               />
             )
           }}
