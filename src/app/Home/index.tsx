@@ -13,7 +13,7 @@ const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
 
 export function Home() {
-  const [filter, setFilter] = useState<FilterStatus>()
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.PENDING)
   const [description, setDescription] = useState<string>()
   const [items, setItems] = useState<ItemStorageProps[]>([])
 
@@ -37,7 +37,7 @@ export function Home() {
     }
 
     await ItemStorage.add(newItem)
-    await getItems()
+    await itemsByStatus()
   }
 
   function handleRemoveItem() {
@@ -48,9 +48,9 @@ export function Home() {
     console.log('Cambia status')
   }
 
-  async function getItems() {
+  async function itemsByStatus() {
     try {
-      const response = await ItemStorage.get()
+      const response = await ItemStorage.getByStatus(filter)
       setItems(response)
     
     } catch (error) {
@@ -60,8 +60,8 @@ export function Home() {
   }
  
   useEffect(() => {
-    getItems()
-  }, [])
+    itemsByStatus()
+  }, [filter])
   
   return (
     <View style={styles.container}>
