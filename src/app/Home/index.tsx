@@ -38,6 +38,10 @@ export function Home() {
 
     await ItemStorage.add(newItem)
     await itemsByStatus()
+    
+    Alert.alert("Añadido", `Añadido ${description}`)
+    setFilter(FilterStatus.PENDING)
+    setDescription("")
   }
 
   function handleRemoveItem() {
@@ -58,6 +62,7 @@ export function Home() {
       Alert.alert("Error", "No fue posible filtrar por los artículos.")
     }
   }
+  
  
   useEffect(() => {
     itemsByStatus()
@@ -71,6 +76,7 @@ export function Home() {
         <Input 
           placeholder="¿Que necesitas comprar?"
           onChangeText={(value) => handleInputText(value)}
+          value={description}
           />
         <Button 
           title="Añadir"
